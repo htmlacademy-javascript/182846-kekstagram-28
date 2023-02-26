@@ -52,10 +52,8 @@ const createRandomId = createRandomValue(1, 25);
 const createRandomUrlImage = createRandomValue(1, 25);
 
 const createPost = () => {
-  const createRandomIdComments = createRandomValue(1, 5);
-
-  const createComment = () => ({
-    id: createRandomIdComments(),
+  const createComment = (id) => ({
+    id,
     avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
     message: getRandomArrayElement(MESSAGES),
     name: getRandomArrayElement(NAME_USERS),
@@ -66,7 +64,7 @@ const createPost = () => {
     url: `photos/${createRandomUrlImage()}.jpg`,
     description: getRandomArrayElement(DESCRIPTIONS),
     likes: getRandomInteger(15, 200),
-    comments: Array.from({length: getRandomInteger(1, 5)}, createComment)
+    comments: Array.from({length: getRandomInteger(1, 5)}, (_, index) => createComment(index + 1))
   };
 };
 
