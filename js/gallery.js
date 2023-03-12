@@ -1,12 +1,10 @@
-import {createPosts} from './data.js';
+import { posts } from './posts.js';
 
 const galleryList = document.querySelector('.pictures');
 
 const thumbnailTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
-
-const posts = createPosts();
 
 const postFragment = document.createDocumentFragment();
 
