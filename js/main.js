@@ -1,2 +1,4 @@
-import './gallery.js';
-import './full-image.js';
+import { createPosts } from './data.js';
+import { drawGallery } from './gallery.js';
+
+drawGallery(createPosts());

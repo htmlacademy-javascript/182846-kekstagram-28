@@ -1,19 +1,24 @@
-import { posts } from './posts.js';
+import { drawThumbnails } from './thumb.js';
+import { showFullPost } from './full-image.js';
 
-const galleryList = document.querySelector('.pictures');
+const container = document.querySelector('.pictures');
 
-const thumbnailTemplate = document.querySelector('#picture')
-  .content
-  .querySelector('.picture');
+const drawGallery = (posts) => {
+  container.addEventListener('click', (evt) => {
+    evt.preventDefault();
 
-const postFragment = document.createDocumentFragment();
+    const elementTarget = evt.target.closest('[data-thumb-id]');
 
-posts.forEach(({url, likes, comments}) => {
-  const post = thumbnailTemplate.cloneNode(true);
-  post.querySelector('.picture__img').src = url;
-  post.querySelector('.picture__likes').textContent = likes;
-  post.querySelector('.picture__comments').textContent = comments.length;
-  postFragment.append(post);
-});
+    if (!elementTarget) {
+      return;
+    }
 
-galleryList.append(postFragment);
+    const thumb = posts.find((item) => item.id === +elementTarget.dataset.thumbId);
+
+    showFullPost(thumb);
+  });
+
+  drawThumbnails(posts, container);
+};
+
+export { drawGallery };

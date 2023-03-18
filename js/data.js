@@ -43,10 +43,10 @@ const createPost = () => {
     url: `photos/${createRandomUrlImage()}.jpg`,
     description: getRandomArrayElement(DESCRIPTIONS),
     likes: getRandomInteger(15, 200),
-    comments: Array.from({length: getRandomInteger(1, 5)}, (_, index) => createComment(index + 1))
+    comments: Array.from({length: getRandomInteger(1, 15)}, (_, index) => createComment(index + 1))
   };
 };
 
 const createPosts = () => Array.from({length: QUANTITY_POST}, createPost);
 
-export {createPosts};
+export { createPosts };

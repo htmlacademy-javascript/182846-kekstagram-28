@@ -1,14 +1,20 @@
-import { posts } from './posts.js';
 import { isEscapeKey } from './utils.js';
 
-const containerPictures = document.querySelector('.pictures');
+const COMMENTS_STEP = 5;
+let commentsCount = 0;
+let comments = [];
+
 const fullPictureContainer = document.querySelector('.big-picture');
-const allPictures = [...document.querySelectorAll('.picture')];
+const commentList = fullPictureContainer.querySelector('.social__comments');
 const closeModal = document.querySelector('.big-picture__cancel');
+const buttonLoadComments = document.querySelector('.comments-loader');
+const valueComments = document.querySelector('.social__comment-count');
+
+const commentTemplate = document.querySelector('#comment')
+  .content
+  .querySelector('.social__comment');
 
 // modal
-let modalHide = null;
-
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -16,62 +22,75 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
-const modalShow = () => {
+function modalShow() {
   fullPictureContainer.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
   document.addEventListener('keydown', onDocumentKeydown);
-};
+}
 
-modalHide = () => {
+function modalHide() {
   fullPictureContainer.classList.add('hidden');
   document.body.classList.remove('modal-open');
+  commentsCount = 0;
 
   document.removeEventListener('keydown', onDocumentKeydown);
-};
+}
 
 closeModal.addEventListener('click', () => {
   modalHide();
 });
 
 // draw big image
-const drawFullPost = (container, obj) => {
-  const commentList = container.querySelector('.social__comments');
-
-  container.querySelector('.big-picture__img img').src = obj.url;
-  container.querySelector('.likes-count').textContent = obj.likes;
-  container.querySelector('.comments-count').textContent = obj.comments.length;
-  container.querySelector('.social__caption').textContent = obj.description;
-  commentList.innerHTML = '';
-
-  obj.comments.forEach(({avatar, message, name}) => {
-    const comment = `
-      <li class="social__comment">
-        <img
-            class="social__picture"
-            src=${avatar}
-            alt=${name}
-            width="35" height="35">
-        <p class="social__text">${message}</p>
-      </li>`;
-
-    commentList.insertAdjacentHTML('afterbegin', comment);
-  });
+const drawFullPost = (obj) => {
+  fullPictureContainer.querySelector('.big-picture__img img').src = obj.url;
+  fullPictureContainer.querySelector('.likes-count').textContent = obj.likes;
+  fullPictureContainer.querySelector('.comments-count').textContent = obj.comments.length;
+  fullPictureContainer.querySelector('.social__caption').textContent = obj.description;
 };
 
-const onThumbClick = (evt) => {
-  evt.preventDefault();
+// draw comments
+const createComment = ({avatar, message, name}) => {
+  const comment = commentTemplate.cloneNode(true);
 
-  const elementTarget = evt.target.closest('.picture');
-  const indexTarget = allPictures.indexOf(elementTarget);
-  const data = posts[indexTarget];
+  comment.querySelector('.social__picture').src = avatar;
+  comment.querySelector('.social__picture').alt = name;
+  comment.querySelector('.social__text').textContent = message;
 
-  if (elementTarget) {
-    drawFullPost(fullPictureContainer, data);
-    fullPictureContainer.querySelector('.social__comment-count').classList.add('hidden');
-    fullPictureContainer.querySelector('.comments-loader').classList.add('hidden');
-    modalShow();
+  return comment;
+};
+
+const drawComments = () => {
+  commentsCount += COMMENTS_STEP;
+
+  if (commentsCount >= comments.length) {
+    buttonLoadComments.classList.add('hidden');
+    commentsCount = comments.length;
+  } else {
+    buttonLoadComments.classList.remove('hidden');
   }
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = 0; i < commentsCount; i++) {
+    const comment = createComment(comments[i]);
+    fragment.append(comment);
+  }
+
+  commentList.innerHTML = '';
+  commentList.append(fragment);
+  valueComments.innerHTML = `${commentsCount} из <span class="comments-count">${comments.length}</span> комментариев`;
 };
 
-containerPictures.addEventListener('click', onThumbClick);
+buttonLoadComments.addEventListener('click', () => {
+  drawComments();
+});
+
+const showFullPost = (data) => {
+  modalShow();
+  drawFullPost(data);
+  comments = data.comments.slice();
+  drawComments();
+};
+
+export {showFullPost};
