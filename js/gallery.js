@@ -5,8 +5,6 @@ const container = document.querySelector('.pictures');
 
 const drawGallery = (posts) => {
   container.addEventListener('click', (evt) => {
-    evt.preventDefault();
-
     const elementTarget = evt.target.closest('[data-thumb-id]');
 
     if (!elementTarget) {
