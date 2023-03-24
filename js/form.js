@@ -1,4 +1,6 @@
 import { isEscapeKey } from './utils.js';
+import { resetScale } from './scale.js';
+import { resetEffects } from './effects.js';
 
 const MAX_LENGTH_COMMENT = 140;
 const MAX_LENGTH_HASHTAG = 5;
@@ -23,7 +25,7 @@ const validateTags = (value) => {
   const tags = value
     .trim()
     .split(' ')
-    .filter((tag) => tag.trim().length);
+    .filter(Boolean);
 
   const transformTags = tags.map((tag) => tag.toLowerCase());
 
@@ -78,6 +80,8 @@ function modalShow() {
 function modalHide() {
   pristine.reset();
   form.reset();
+  resetScale();
+  resetEffects();
   imageEdit.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
