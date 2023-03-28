@@ -8,9 +8,11 @@ const MAX_LENGTH_HASHTAG = 5;
 const form = document.querySelector('.img-upload__form');
 const inputHashtag = form.querySelector('.text__hashtags');
 const inputComment = form.querySelector('.text__description');
+const submitButtonElement = form.querySelector('.img-upload__submit');
 const uploadImage = document.querySelector('#upload-file');
 const imageEdit = document.querySelector('.img-upload__overlay');
 const closeModal = document.querySelector('.img-upload__cancel');
+
 
 // validation
 
@@ -57,11 +59,6 @@ inputHashtag.addEventListener('change', () => {
   pristine.validate(inputHashtag);
 });
 
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
-
 // modal
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -86,6 +83,29 @@ function modalHide() {
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
 }
+
+// block submit button
+const blockSubmitButton = () => {
+  submitButtonElement.disabled = true;
+};
+
+const unblockSubmitButton = () => {
+  submitButtonElement.disabled = false;
+};
+
+// submit form
+const setOnFormSubmit = (cb) => {
+  form.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+
+    if (isValid) {
+      blockSubmitButton();
+      await cb(new FormData(form));
+      unblockSubmitButton();
+    }
+  });
+};
 
 uploadImage.addEventListener('change', () => {
   modalShow();
@@ -112,3 +132,5 @@ inputHashtag.addEventListener('focus', () => {
 inputHashtag.addEventListener('blur', () => {
   document.addEventListener('keydown', onDocumentKeydown);
 });
+
+export { modalHide, setOnFormSubmit };
