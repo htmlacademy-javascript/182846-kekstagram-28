@@ -3,20 +3,24 @@ import { showFullPost } from './full-image.js';
 
 const container = document.querySelector('.pictures');
 
-const drawGallery = (posts) => {
-  container.addEventListener('click', (evt) => {
-    const elementTarget = evt.target.closest('[data-thumb-id]');
+let images = [];
 
-    if (!elementTarget) {
-      return;
-    }
+const onContainerClick = (evt) => {
+  const elementTarget = evt.target.closest('[data-thumb-id]');
 
-    const thumb = posts.find((item) => item.id === +elementTarget.dataset.thumbId);
+  if (!elementTarget) {
+    return;
+  }
 
-    showFullPost(thumb);
-  });
+  const thumb = images.find((item) => item.id === +elementTarget.dataset.thumbId);
 
-  drawThumbnails(posts, container);
+  showFullPost(thumb);
+};
+
+const drawGallery = (currentImages) => {
+  images = currentImages;
+  drawThumbnails(images, container);
+  container.addEventListener('click', onContainerClick);
 };
 
 export { drawGallery };
