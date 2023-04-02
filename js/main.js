@@ -5,8 +5,6 @@ import { showSuccessMessage, showErrorMessage } from './message.js';
 import { modalHide, setOnFormSubmit } from './form.js';
 import { init, getFilteredImages } from './filter.js';
 import './form.js';
-import './scale.js';
-import './effects.js';
 
 setOnFormSubmit (async (data) => {
   try {

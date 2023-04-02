@@ -1,6 +1,9 @@
 import { isEscapeKey } from './utils.js';
 import { resetScale } from './scale.js';
 import { resetEffects } from './effects.js';
+import './scale.js';
+import './effects.js';
+import './load-image.js';
 
 const MAX_LENGTH_COMMENT = 140;
 const MAX_LENGTH_HASHTAG = 5;
