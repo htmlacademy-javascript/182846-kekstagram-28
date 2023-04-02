@@ -1,7 +1,7 @@
 import { drawThumbnails } from './thumb.js';
 import { showFullPost } from './full-image.js';
 
-const container = document.querySelector('.pictures');
+const containerElement = document.querySelector('.pictures');
 
 let images = [];
 
@@ -19,8 +19,8 @@ const onContainerClick = (evt) => {
 
 const drawGallery = (currentImages) => {
   images = currentImages;
-  drawThumbnails(images, container);
-  container.addEventListener('click', onContainerClick);
+  drawThumbnails(images, containerElement);
+  containerElement.addEventListener('click', onContainerClick);
 };
 
 export { drawGallery };

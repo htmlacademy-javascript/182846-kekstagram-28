@@ -1,22 +1,25 @@
 import { isEscapeKey } from './utils.js';
 import { resetScale } from './scale.js';
 import { resetEffects } from './effects.js';
+import './scale.js';
+import './effects.js';
+import './load-image.js';
 
 const MAX_LENGTH_COMMENT = 140;
 const MAX_LENGTH_HASHTAG = 5;
 
-const form = document.querySelector('.img-upload__form');
-const inputHashtag = form.querySelector('.text__hashtags');
-const inputComment = form.querySelector('.text__description');
-const submitButtonElement = form.querySelector('.img-upload__submit');
-const uploadImage = document.querySelector('#upload-file');
-const imageEdit = document.querySelector('.img-upload__overlay');
-const closeModal = document.querySelector('.img-upload__cancel');
+const formElement = document.querySelector('.img-upload__form');
+const inputHashtagElement = formElement.querySelector('.text__hashtags');
+const inputCommentElement = formElement.querySelector('.text__description');
+const submitButtonElement = formElement.querySelector('.img-upload__submit');
+const uploadImageElement = document.querySelector('#upload-file');
+const imageEditElement = document.querySelector('.img-upload__overlay');
+const closeModalElement = document.querySelector('.img-upload__cancel');
 
 
 // validation
 
-const pristine = new Pristine(form, {
+const pristine = new Pristine(formElement, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper'
 });
@@ -48,15 +51,15 @@ const validateTags = (value) => {
   return true;
 };
 
-pristine.addValidator(inputComment, validateComment, 'Длина комментария не больше 140 символов');
-pristine.addValidator(inputHashtag, validateTags, 'Введите валидный хэштег');
+pristine.addValidator(inputCommentElement, validateComment, 'Длина комментария не больше 140 символов');
+pristine.addValidator(inputHashtagElement, validateTags, 'Введите валидный хэштег');
 
-inputComment.addEventListener('change', () => {
-  pristine.validate(inputComment);
+inputCommentElement.addEventListener('change', () => {
+  pristine.validate(inputCommentElement);
 });
 
-inputHashtag.addEventListener('change', () => {
-  pristine.validate(inputHashtag);
+inputHashtagElement.addEventListener('change', () => {
+  pristine.validate(inputHashtagElement);
 });
 
 // modal
@@ -68,7 +71,7 @@ const onDocumentKeydown = (evt) => {
 };
 
 function modalShow() {
-  imageEdit.classList.remove('hidden');
+  imageEditElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
   document.addEventListener('keydown', onDocumentKeydown);
@@ -76,10 +79,10 @@ function modalShow() {
 
 function modalHide() {
   pristine.reset();
-  form.reset();
+  formElement.reset();
   resetScale();
   resetEffects();
-  imageEdit.classList.add('hidden');
+  imageEditElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
 }
@@ -95,41 +98,41 @@ const unblockSubmitButton = () => {
 
 // submit form
 const setOnFormSubmit = (cb) => {
-  form.addEventListener('submit', async (evt) => {
+  formElement.addEventListener('submit', async (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
 
     if (isValid) {
       blockSubmitButton();
-      await cb(new FormData(form));
+      await cb(new FormData(formElement));
       unblockSubmitButton();
     }
   });
 };
 
-uploadImage.addEventListener('change', () => {
+uploadImageElement.addEventListener('change', () => {
   modalShow();
 });
 
-closeModal.addEventListener('click', () => {
+closeModalElement.addEventListener('click', () => {
   modalHide();
 });
 
 // not close modal if the focus element
 
-inputComment.addEventListener('focus', () => {
+inputCommentElement.addEventListener('focus', () => {
   document.removeEventListener('keydown', onDocumentKeydown);
 });
 
-inputComment.addEventListener('blur', () => {
+inputCommentElement.addEventListener('blur', () => {
   document.addEventListener('keydown', onDocumentKeydown);
 });
 
-inputHashtag.addEventListener('focus', () => {
+inputHashtagElement.addEventListener('focus', () => {
   document.removeEventListener('keydown', onDocumentKeydown);
 });
 
-inputHashtag.addEventListener('blur', () => {
+inputHashtagElement.addEventListener('blur', () => {
   document.addEventListener('keydown', onDocumentKeydown);
 });
 
