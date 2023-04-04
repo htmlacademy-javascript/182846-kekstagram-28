@@ -14,7 +14,6 @@ const commentTemplateElement = document.querySelector('#comment')
   .content
   .querySelector('.social__comment');
 
-// modal
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -41,7 +40,6 @@ closeModalElement.addEventListener('click', () => {
   modalHide();
 });
 
-// draw big image
 const drawFullPost = (obj) => {
   fullPictureContainerElement.querySelector('.big-picture__img img').src = obj.url;
   fullPictureContainerElement.querySelector('.likes-count').textContent = obj.likes;
@@ -49,7 +47,6 @@ const drawFullPost = (obj) => {
   fullPictureContainerElement.querySelector('.social__caption').textContent = obj.description;
 };
 
-// draw comments
 const createComment = ({avatar, message, name}) => {
   const comment = commentTemplateElement.cloneNode(true);
 

@@ -16,9 +16,6 @@ const uploadImageElement = document.querySelector('#upload-file');
 const imageEditElement = document.querySelector('.img-upload__overlay');
 const closeModalElement = document.querySelector('.img-upload__cancel');
 
-
-// validation
-
 const pristine = new Pristine(formElement, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper'
@@ -62,22 +59,23 @@ inputHashtagElement.addEventListener('change', () => {
   pristine.validate(inputHashtagElement);
 });
 
-// modal
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    modalHide();
+    if (!document.querySelector('.error')) {
+      evt.preventDefault();
+      hideModal();
+    }
   }
 };
 
-function modalShow() {
+function showModal() {
   imageEditElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
   document.addEventListener('keydown', onDocumentKeydown);
 }
 
-function modalHide() {
+function hideModal() {
   pristine.reset();
   formElement.reset();
   resetScale();
@@ -87,7 +85,6 @@ function modalHide() {
   document.removeEventListener('keydown', onDocumentKeydown);
 }
 
-// block submit button
 const blockSubmitButton = () => {
   submitButtonElement.disabled = true;
 };
@@ -96,7 +93,6 @@ const unblockSubmitButton = () => {
   submitButtonElement.disabled = false;
 };
 
-// submit form
 const setOnFormSubmit = (cb) => {
   formElement.addEventListener('submit', async (evt) => {
     evt.preventDefault();
@@ -111,14 +107,12 @@ const setOnFormSubmit = (cb) => {
 };
 
 uploadImageElement.addEventListener('change', () => {
-  modalShow();
+  showModal();
 });
 
 closeModalElement.addEventListener('click', () => {
-  modalHide();
+  hideModal();
 });
-
-// not close modal if the focus element
 
 inputCommentElement.addEventListener('focus', () => {
   document.removeEventListener('keydown', onDocumentKeydown);
@@ -136,4 +130,4 @@ inputHashtagElement.addEventListener('blur', () => {
   document.addEventListener('keydown', onDocumentKeydown);
 });
 
-export { modalHide, setOnFormSubmit };
+export { hideModal, setOnFormSubmit };
