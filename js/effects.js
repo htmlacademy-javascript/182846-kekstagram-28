@@ -57,13 +57,13 @@ const sliderElement = document.querySelector('.effect-level__slider');
 const sliderContainerElement = document.querySelector('.img-upload__effect-level');
 const effectValueElement = document.querySelector('.effect-level__value');
 
-const isDefaultEffect = () => currentEffect === EFFECTS.none;
+const checkDefaultEffect = () => currentEffect === EFFECTS.none;
 
-const sliderShow = () => {
+const showSlider = () => {
   sliderContainerElement.classList.remove('hidden');
 };
 
-const sliderHide = () => {
+const hideSlider = () => {
   sliderContainerElement.classList.add('hidden');
 };
 
@@ -77,10 +77,10 @@ const updateSlider = () => {
     }
   });
 
-  if (isDefaultEffect()) {
-    sliderHide();
+  if (checkDefaultEffect()) {
+    hideSlider();
   } else {
-    sliderShow();
+    showSlider();
   }
 };
 
@@ -97,7 +97,7 @@ const onEffectsChange = (evt) => {
 const onSliderUpdate = () => {
   const sliderValue = sliderElement.noUiSlider.get();
 
-  imageElement.style.filter = isDefaultEffect()
+  imageElement.style.filter = checkDefaultEffect()
     ? EFFECTS.none.style
     : `${currentEffect.style}(${sliderValue}${currentEffect.units})`;
 
@@ -119,7 +119,7 @@ noUiSlider.create(sliderElement, {
   }
 });
 
-sliderHide();
+hideSlider();
 
 effectsElement.addEventListener('change', onEffectsChange);
 sliderElement.noUiSlider.on('update', onSliderUpdate);

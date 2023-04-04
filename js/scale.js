@@ -1,7 +1,9 @@
-const STEP_SCALE = 25;
-const MIN_SCALE_VALUE = 25;
-const MAX_SCALE_VALUE = 100;
-const DEFAULT_VALUE = 100;
+const scaleParameter = {
+  STEP_SCALE: 25,
+  MIN_SCALE_VALUE: 25,
+  MAX_SCALE_VALUE: 100,
+  DEFAULT_VALUE: 100
+};
 
 const buttonSmallerElement = document.querySelector('.scale__control--smaller');
 const buttonBiggerElement = document.querySelector('.scale__control--bigger');
@@ -16,10 +18,10 @@ const scaleImage = (value) => {
 const onButtonSmallerClick = () => {
   const value = parseInt(inputValueElement.value, 10);
 
-  let currentValue = value - STEP_SCALE;
+  let currentValue = value - scaleParameter.STEP_SCALE;
 
-  if (currentValue < MIN_SCALE_VALUE) {
-    currentValue = MIN_SCALE_VALUE;
+  if (currentValue < scaleParameter.MIN_SCALE_VALUE) {
+    currentValue = scaleParameter.MIN_SCALE_VALUE;
   }
 
   scaleImage(currentValue);
@@ -28,16 +30,16 @@ const onButtonSmallerClick = () => {
 const onButtonBiggerClick = () => {
   const value = parseInt(inputValueElement.value, 10);
 
-  let currentValue = value + STEP_SCALE;
+  let currentValue = value + scaleParameter.STEP_SCALE;
 
-  if (currentValue > MAX_SCALE_VALUE) {
-    currentValue = MAX_SCALE_VALUE;
+  if (currentValue > scaleParameter.MAX_SCALE_VALUE) {
+    currentValue = scaleParameter.MAX_SCALE_VALUE;
   }
 
   scaleImage(currentValue);
 };
 
-const resetScale = () => scaleImage(DEFAULT_VALUE);
+const resetScale = () => scaleImage(scaleParameter.DEFAULT_VALUE);
 
 buttonSmallerElement.addEventListener('click', onButtonSmallerClick);
 buttonBiggerElement.addEventListener('click', onButtonBiggerClick);
